@@ -1,0 +1,8 @@
+{
+  "name": "todo-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:YasinYA/todo-app.git",
+  "author": "Yasin Yusuf <yaasiinyuusuf78@gmail.com>",
+  "license": "MIT"
+}
