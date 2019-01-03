@@ -3,6 +3,9 @@ const path = require("path");
 const express = require('express');
 const bodyParser = require('body-parser');
 const methodOverride =  require('method-override');
+const session = require('express-session');
+const expressValidator = require('express-validator');
+const flash = require('express-flash-messages');
 const favicon = require('express-favicon');
 
 const db = require("./db/todos");
@@ -19,10 +22,16 @@ const app = express();
 app.set('views', viewsPath);
 app.set('view engine', 'ejs');
 
-// Middlewares
+// App Config
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: false
+}));
+app.use(flash());
 app.use(methodOverride('_method'));
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(expressValidator());
 
 // static files
 app.use('/static/', express.static(publicPath));
@@ -34,41 +43,96 @@ app.get('/', (req, res) => {
   res.render('index');
 });
 
-app.get('/todo/all', (req, res) => {
+app.get('/all', (req, res) => {
   res.render('todos', {
     todos: db.getAll()
   });
 });
 
-app.get('/todo/single/:id', (req, res) => {
+app.get('/single/:id', (req, res) => {
   res.render('todo', {
     todo: db.getOneTodo(req.params.id)
   });
 });
 
-app.get('/todo/create', (req, res) => {
-  res.render('createTodo');
+app.get('/create', (req, res) => {
+  const messages = res.locals.getMessages();
+  if(messages.error) {
+    res.render('createTodo', { messages: messages.error });
+  }
+  else {
+    res.render('createTodo', { messages: {}});
+  }
 });
 
-app.post('/todo/createtodo', (req, res) => {
-  db.createTodo(req.body.task);
-  res.redirect('/todo/all');
+app.post('/createtodo', (req, res) => {
+  // Validations
+  req.checkBody('task', 'Task is required').notEmpty();
+
+  // Validation results
+  req.getValidationResult()
+    .then(result => {
+      if (result.isEmpty() === false) {
+        result.array().forEach(error => {
+          req.flash('error', error.msg);
+        });
+        res.redirect('/create');
+      }
+      else {
+        db.createTodo(req.body.task);
+        res.redirect('/all');
+      }
+
+    });
 });
 
-app.get('/todo/edit/:id', (req, res) => {
+app.get('/edit/:id', (req, res) => {
+  const messages = res.locals.getMessages();
   const todo = db.getOneTodo(req.params.id);
-  res.render('editTodo', { todo });
+
+  if(messages.error) {
+    res.render('editTodo', { todo, messages });
+  } else {
+
+  }
+  res.render('editTodo', { todo , messages: {}});
 });
 
-app.put('/todo/edittodo', (req, res) => {
-  db.editTodo(req.body.id, req.body.task);
-  const url = `/todo/single/${req.body.id}`;
-  res.redirect(url);
+app.put('/edittodo', (req, res) => {
+  // Validation
+  req.checkBody('id', 'ID is required').notEmpty();
+  req.checkBody('task', 'Task is required').notEmpty();
+
+  // Validation Results
+  req.getValidationResult()
+    .then(result => {
+      if(result.isEmpty()) {
+        result.array().forEach(error => {
+          req.flash('error', error.msg);
+        });
+        res.redirect('/edit/' + req.body.id);
+      } else {
+        db.editTodo(req.body.id, req.body.task);
+        const url = `/single/${req.body.id}`;
+        res.redirect(url);
+      }
+    });
 });
 
-app.delete('/todo/delete/:id', (req, res) => {
+app.delete('/delete/:id', (req, res) => {
   db.deleteTodo(req.params.id);
-  res.redirect('/todo/all');
+  res.redirect('/all');
+});
+
+
+// 404 500 Errors
+app.use((req, res, next) => {
+  res.status(404)
+  res.render('404');
+});
+app.use((req, res, next) => {
+  res.status(500)
+  res.render('500');
 });
 
 app.listen(port, () => {
