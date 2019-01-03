@@ -44,6 +44,16 @@ const todos = [
   }
 ];
 
+const generateIds = () => {
+  var text = "";
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+  for (var i = 0; i < 3; i++)
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+  return text;
+}
+
 const db = {
   getAll: function() {
     return todos;
@@ -51,7 +61,12 @@ const db = {
   getOneTodo: function(id) {
     return _.find(todos, {id: id});
   },
-  createTodo: function(todo) {
+  createTodo: function(task) {
+    const todo = {
+      id: generateIds(),
+      task: task
+    }
+    
     todos.push(todo);
     return todos;
   },

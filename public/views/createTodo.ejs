@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <% include ./partials/head.ejs %>
+</head>
+<body>
+    <header class="container-fluid">
+        <% include ./partials/header.ejs %>
+    </header>
+
+    <main class="container">
+        <h1>Create Todo</h1>
+        <form name="createTodoFrom" action="/createtodoapi" method="POST">
+            <div class="form-group">
+                <label for="task">Task</label>
+                <input type="text" class="form-control" name="task" id="task" aria-describedby="Task" placeholder="Todo Task">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </main>
+
+    <footer class="container-fluid">
+        <% include ./partials/footer.ejs %>
+    </footer>
+</body>
+</html>
