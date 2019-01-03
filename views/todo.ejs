@@ -12,8 +12,8 @@
         <h1>
             Task: <%= todo.task %>
         </h1>
-        <a class="btn btn-primary" href="/edittodo/<%= todo.id %>"> Edit </a>
-        <form action="/deletetodo/<%= todo.id %>?_method=DELETE" method="POST">
+        <a class="btn btn-primary" href="/todo/edit/<%= todo.id %>"> Edit </a>
+        <form action="/todo/delete/<%= todo.id %>?_method=DELETE" method="POST">
             <button class="btn btn-primary" type="submit"> Delete </button>
         </form>
     </main>

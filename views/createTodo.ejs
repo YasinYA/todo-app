@@ -9,11 +9,11 @@
     </header>
 
     <main class="container">
-        <h1>Edit Todo</h1>
-        <form name="createTodoFrom" action="/edittodoapi?_method=PUT" method="POST">
+        <h1>Create Todo</h1>
+        <form name="createTodoFrom" action="/todo/createtodo" method="POST">
             <div class="form-group">
                 <label for="task">Task</label>
-                <input type="text" class="form-control" name="task" id="task" aria-describedby="Task" value="<%= todo.task %>" placeholder="Todo Task"><input type="hidden" class="form-control" name="id" id="todoId" aria-describedby="TodoId" value="<%= todo.id %>">
+                <input type="text" class="form-control" name="task" id="task" aria-describedby="Task" placeholder="Todo Task">
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
