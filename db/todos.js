@@ -68,7 +68,7 @@ const db = {
     }
     
     todos.push(todo);
-    return todos;
+    return todo;
   },
   deleteTodo: function(id) {
     _.remove(todos, {id: id});
