@@ -4,5 +4,22 @@
   "main": "index.js",
   "repository": "git@github.com:YasinYA/todo-app.git",
   "author": "Yasin Yusuf <yaasiinyuusuf78@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "express-favicon": "^2.0.1",
+    "express-flash-messages": "^0.1.1",
+    "express-session": "^1.15.6",
+    "express-validator": "^5.3.1",
+    "lodash": "^4.17.11",
+    "method-override": "^3.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.9"
+  },
+  "scripts": {
+    "start": "nodemon server"
+  }
 }
