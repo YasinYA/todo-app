@@ -10,7 +10,7 @@
 
     <main class="container">
         <h1>Edit Todo</h1>
-        <form name="createTodoFrom" action="/edittodo?_method=PUT" method="POST">
+        <form name="createTodoFrom" action="/edittodo/<%=todo.id %>?_method=PUT" method="POST">
             <div class="form-group">
                 <label for="task">Task</label>
                 <input type="text" class="form-control" name="task" id="task" aria-describedby="Task" value="<%= todo.task %>" placeholder="Todo Task" required>

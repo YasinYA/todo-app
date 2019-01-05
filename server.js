@@ -91,29 +91,27 @@ app.get('/edit/:id', (req, res) => {
   const todo = db.getOneTodo(req.params.id);
 
   if(messages.error) {
-    res.render('editTodo', { todo, messages });
+    res.render('editTodo', { todo, messages:messages.error });
   } else {
-
+    res.render('editTodo', { todo , messages: {}});
   }
-  res.render('editTodo', { todo , messages: {}});
 });
 
-app.put('/edittodo', (req, res) => {
+app.put('/edittodo/:id', (req, res) => {
   // Validation
-  req.checkBody('id', 'ID is required').notEmpty();
   req.checkBody('task', 'Task is required').notEmpty();
 
   // Validation Results
   req.getValidationResult()
     .then(result => {
-      if(result.isEmpty()) {
+      if(result.isEmpty() === false) {
         result.array().forEach(error => {
           req.flash('error', error.msg);
         });
-        res.redirect('/edit/' + req.body.id);
+        res.redirect('/edit/' + req.params.id);
       } else {
-        db.editTodo(req.body.id, req.body.task);
-        const url = `/single/${req.body.id}`;
+        db.editTodo(req.params.id, req.body.task);
+        const url = `/single/${req.params.id}`;
         res.redirect(url);
       }
     });
